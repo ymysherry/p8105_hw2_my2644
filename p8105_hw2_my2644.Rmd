@@ -66,8 +66,9 @@ month_df =
 
 
 precip_df = 
-  bind_rows(precip_2018, precip_2017) 
-  left_join(precip_df, month_df, by = "month")
+bind_rows(precip_2018, precip_2017) 
+left_join(precip_df, month_df, by = "month")
+  
 ```
 
 ```{r}
