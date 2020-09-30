@@ -111,3 +111,29 @@ skimr::skim(nycsubway_df)
 #Describe the dataset
 
 This dataset contains information from the NYC subway transit data. The dataset contains 19 variables in total, including information on entrance, exit, station names, routes, lines, as well as specific longitude and latitude of subway stations. There are a total of `r nrow(nycsubway_df)` rows in our final dataset. Additional data cleaning has been performed by the janitor step. Entry variable has been converted from character to logical by using mutate. This is a tidy dataset with dimensions of `r nrow(nycsubway_df)*ncol(nycsubway_df)`. Number of columns represents variables and number of rows represents observations.
+
+##Answering questions using the NYC subway transit data
+#how many distinct stations (by name and line) are there
+```{r}
+distinct_stations_df = 
+  distinct(nycsubway_df, line, station_name, .keep_all = TRUE)
+```
+1. There are `r nrow(distinct_stations_df)` distinct stations
+
+#how many stations are ADA compliant
+```{r}
+ADAcompliant_df=
+  filter(distinct_stations_df, ada == TRUE)
+```
+2. `r nrow(ADAcompliant_df)` stations are ADA compliant
+
+#What proportion of station entrances / exits without vending allow entrance
+```{r}
+entrance_novending_df = 
+  filter(distinct_stations_df, vending == "NO", entry == "YES") 
+
+novending_df = 
+  filter(distinct_stations_df, vending == "NO")
+```
+3. The proportion of stationentrances/exits without vending allows entrance is `r nrow(entrance_novending_df)/nrow(novending_df)`
+
