@@ -91,3 +91,23 @@ median(pull(sports_balls_2017_df, sports_balls), na.rm= TRUE)
 The median number of sports balls in a dumpster in 2017 is 8.
 
 
+##Problem 2
+#Read and clean the NYC subway dataset. Retain useful variables and convert the entry variable from character (YES vs NO) to a logical variable
+
+```{r}
+nycsubway_df =
+  read_csv(
+  "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
+
+nycsubway_df = janitor::clean_names(nycsubway_df) 
+
+nycsubway_df = 
+  select(nycsubway_df, line, station_name, station_latitude, station_longitude, route1:route11, entrance_type, entry, vending, ada)
+
+nycsubway_df =  
+  mutate(nycsubway_df, entry = recode (entry, "YES"="TRUE","NO"="FALSE"), entry = as.logical(entry))
+skimr::skim(nycsubway_df)
+```
+#Describe the dataset
+
+This dataset contains information from the NYC subway transit data. The dataset contains 19 variables in total, including information on entrance, exit, station names, routes, lines, as well as specific longitude and latitude of subway stations. There are a total of `r nrow(nycsubway_df)` rows in our final dataset. Additional data cleaning has been performed by the janitor step. Entry variable has been converted from character to logical by using mutate. This is a tidy dataset with dimensions of `r nrow(nycsubway_df)*ncol(nycsubway_df)`. Number of columns represents variables and number of rows represents observations.
