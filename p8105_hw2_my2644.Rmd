@@ -18,7 +18,7 @@ library(readxl)
 ```{r}
 trashwheel_df =
   read_xlsx(
-  "~/Documents/Data sci 1/data wrangling/p8105_hw2_my2644/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+  "./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
   sheet = "Mr. Trash Wheel",
   range = cell_cols("A:N")) %>%
   janitor::clean_names() %>%
@@ -33,7 +33,7 @@ Read precipitation data for 2018 and 2017
 ```{r}
 precip_2018 = 
   read_excel(
-    "~/Documents/Data sci 1/data wrangling/p8105_hw2_my2644/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+    "./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
   sheet = "2018 Precipitation",
   skip = 1, 
   ) %>%
@@ -45,7 +45,7 @@ precip_2018 =
 ```{r}
 precip_2017 = 
   read_excel(
-    "~/Documents/Data sci 1/data wrangling/p8105_hw2_my2644/data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
+    "./data/Trash-Wheel-Collection-Totals-8-6-19.xlsx",
   sheet = "2017 Precipitation",
   skip = 1, 
   ) %>%
