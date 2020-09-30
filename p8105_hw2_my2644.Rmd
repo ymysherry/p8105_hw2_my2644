@@ -155,32 +155,95 @@ pols_months_df = separate(pols_months_df, mon, into = c("year", "month", "day"),
 
 pols_months_df =  mutate(pols_months_df, year = as.integer (year), 
          month=month.name[as.integer(month)],
-         day = as.integer(day),
+         day = as.integer(day))
          
-         president = case_when(
+pols_months_df =  mutate(pols_months_df, president = case_when(
            prez_gop == 1 ~ "gop",
            prez_dem == 1 ~ "dem")
-         )   %>%
+         ) 
   
 pols_months_df = select(pols_months_df, -prez_dem,-prez_gop,-day)
-   
+
+view(pols_months_df)   
 
 skimr::skim(pols_months_df)
 ```
 
 
 
-
-
-
-
 #Second, clean the data in snp.csv using a similar process to the above. For consistency across datasets, arrange according to year and month, and organize so that year and month are the leading columns.
+
+```{r}
+snp_df =  read_csv(
+  "./data/fivethirtyeight_datasets/snp.csv")
+snp_df =  janitor::clean_names(snp_df) 
+snp_df =    drop_na(snp_df) 
+snp_df =    separate(snp_df, date, c("month","day","year")) 
+ 
+snp_df =    mutate(snp_df, year = as.integer(year),
+    month = month.name[as.integer(month)],
+    day = as.integer(day))
+
+    
+
+snp_df =    relocate(snp_df, year, month)
+snp_df =    arrange(snp_df, year, month) 
+snp_df =    select(snp_df, -day)
+
+view(snp_df)
+
+skimr::skim(snp_df)
+```
+
 
 
 #Third, tidy the unemployment data so that it can be merged with the previous datasets. This process will involve switching from “wide” to “long” format; ensuring that key variables have the same name; and ensuring that key variables take the same values.
 
+```{r}
+unemploy_df = read_csv(file = "./data/fivethirtyeight_datasets/unemployment.csv") 
+unemploy_df = janitor::clean_names(unemploy_df) 
+unemploy_df =  drop_na(unemploy_df)
+view(unemploy_df)
+
+unemploy_tidy_df = pivot_longer(unemploy_df,jan:dec,names_to = "month",values_to = "percentage")
+
+
+view(unemploy_tidy_df)
+
+
+month_df = 
+  tibble(
+    month = c("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"),
+    month_name = month.name
+  )
+
+
+unemploy_long_tidy_df = left_join(unemploy_tidy_df, month_df, by = "month")
+unemploy_long_tidy_df =  select(unemploy_long_tidy_df, -month) 
+unemploy_long_tidy_df =  select(unemploy_long_tidy_df, year, month=month_name, percentage)
+
+unemploy_long_tidy_df =   relocate(unemploy_long_tidy_df, year, month)
+
+view(unemploy_long_tidy_df)
+
+
+
+
+
+```
+
+
 
 #Join the datasets by merging snp into pols, and merging unemployment into the result.
+```{r}
+pols_snp_df = 
+  left_join(pols_months_df, snp_df, by = c("year"="year","month"="month"))
+
+pols_snp_unemploy =
+  left_join(pols_snp_df, unemploy_long_tidy_df, by = "year","month")
+
+```
+
 
 
 #Write a short paragraph about these datasets. Explain briefly what each dataset contained, and describe the resulting dataset (e.g. give the dimension, range of years, and names of key variables).
