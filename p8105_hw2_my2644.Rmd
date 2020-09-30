@@ -78,6 +78,16 @@ left_join(precip_df, month_df, by = "month")
 
 This dataset contains information from the Mr. Trashwheel trash collector in Baltimore, Maryland. As trash enters the inner harbor, the trash collects that trash, and stores it in a dumpster. The dataset contains information on year, months, and trash collected, including some specific kinds of trash. There are a total of `r nrow(trashwheel_df)` rows in our final dataset. Additional data sheets include month precipitation data.
 
+Look for total precipitation in 2018 and median number of sports balls in a dumpster in 2017
+```{r}
+sum(pull(precip_2018,total),na.rm=TRUE)
+```
+The total precipiration in 2018 is 70.33 inches.
 
+```{r}
+sports_balls_2017_df= filter(trashwheel_df, year==2017)
+median(pull(sports_balls_2017_df, sports_balls), na.rm= TRUE)
+```
+The median number of sports balls in a dumpster in 2017 is 8.
 
 
