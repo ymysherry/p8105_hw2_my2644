@@ -219,10 +219,12 @@ month_df =
 
 
 unemploy_long_tidy_df = left_join(unemploy_tidy_df, month_df, by = "month")
-unemploy_long_tidy_df =  select(unemploy_long_tidy_df, -month) 
-unemploy_long_tidy_df =  select(unemploy_long_tidy_df, year, month=month_name, percentage)
 
-unemploy_long_tidy_df =   relocate(unemploy_long_tidy_df, year, month)
+unemploy_long_tidy_df =  select(unemploy_long_tidy_df, -month) 
+
+unemploy_long_tidy_df =   relocate(unemploy_long_tidy_df, year, month_name)
+
+unemploy_long_tidy_df =  select(unemploy_long_tidy_df, year, month=month_name, percentage)
 
 view(unemploy_long_tidy_df)
 
@@ -238,10 +240,12 @@ view(unemploy_long_tidy_df)
 ```{r}
 pols_snp_df = 
   left_join(pols_months_df, snp_df, by = c("year"="year","month"="month"))
+view(pols_snp_df)
 
-pols_snp_unemploy =
+pols_snp_unemploy_df =
   left_join(pols_snp_df, unemploy_long_tidy_df, by = "year","month")
 
+view(pols_snp_unemploy_df)
 ```
 
 
